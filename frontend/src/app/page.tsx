@@ -11,8 +11,9 @@ export default function Home() {
               InfraDesk
             </h1>
             <p className="mt-3 max-w-2xl text-zinc-300">
-              Next.js frontend + Django/DRF API + Postgres. Start with Docker,
-              then add real auth, RBAC, public submit, and staff workflows.
+              InfraDesk - campus maintenance management system that streamlines the process of 
+              reporting and resolving infrastructure-related issues. It allows users to easily raise complaint tickets for problems. 
+              The system assigns these tickets to designated staff, who can track, manage, and resolve them efficiently. With real-time status updates and organized ticket handling.
             </p>
           </div>
           <div className="hidden sm:flex flex-col gap-2 text-right">
@@ -39,7 +40,7 @@ export default function Home() {
           >
             <div className="text-sm font-medium">Public Portal (WIP)</div>
             <div className="mt-1 text-sm text-zinc-400">
-              Submit + track via OTP/tracking token.
+              Submit + track via tracking token.
             </div>
           </a>
         </div>
