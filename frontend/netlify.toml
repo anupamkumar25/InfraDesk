@@ -1,0 +1,7 @@
+# netlify.toml
+[build]
+  base = "frontend" # remove or change if your base is repo root
+  command = "npm run build"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
