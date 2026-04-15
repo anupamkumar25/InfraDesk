@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ApiError, MeResponse } from "@/lib/api";
 import { clearTokens, getMe } from "@/lib/staffAuth";
+import BrandMark from "@/components/BrandMark";
 
 export default function StaffProfilePage() {
   const router = useRouter();
@@ -50,7 +51,13 @@ export default function StaffProfilePage() {
       : me?.username?.slice(0, 2).toUpperCase() ?? "?";
 
   return (
-    <main className="min-h-screen bg-zinc-950 text-zinc-50">
+    <main className="min-h-screen text-zinc-50">
+      <header className="top-nav">
+        <div className="mx-auto flex max-w-4xl items-center justify-between px-6 py-4">
+          <BrandMark href="/staff/tickets" label="InfraDesk Staff" />
+          <Link href="/" className="secondary-btn px-3 py-1.5 text-xs font-semibold text-zinc-100">Home</Link>
+        </div>
+      </header>
       <div className="mx-auto max-w-4xl px-6 py-10">
         <div className="flex items-center justify-between gap-4">
           <div>

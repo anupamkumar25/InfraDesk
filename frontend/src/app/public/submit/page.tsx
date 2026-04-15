@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import BrandMark from "@/components/BrandMark";
 import {
   apiFetch,
   ApiError,
@@ -131,21 +133,28 @@ export default function PublicSubmitPage() {
   if (submitState.kind === "success") {
     const { ticket_no } = submitState.data;
     return (
-      <main className="min-h-screen bg-zinc-950 text-zinc-50">
+      <main className="min-h-screen text-zinc-50">
+        <header className="top-nav">
+          <div className="mx-auto flex max-w-3xl items-center justify-between px-6 py-4">
+            <BrandMark href="/public" label="InfraDesk Public" />
+            <Link href="/" className="secondary-btn px-3 py-1.5 text-xs font-semibold text-zinc-100">Home</Link>
+          </div>
+        </header>
         <div className="mx-auto max-w-3xl px-6 py-16">
-          <h1 className="text-2xl font-semibold">Complaint Submitted</h1>
+          <div className="glass-card rounded-2xl p-8 sm:p-10">
+          <h1 className="text-3xl font-semibold tracking-tight">Complaint Submitted</h1>
           <p className="mt-2 text-zinc-300">
             Save your ticket number. You can track your complaint using this
             ticket number and your email address.
           </p>
 
-          <div className="mt-8 rounded-lg border border-zinc-800 bg-zinc-900/40 p-5">
+          <div className="mt-8 glass-card rounded-xl p-5">
             <div className="text-xs text-zinc-400">Ticket Number</div>
             <div className="mt-1 font-mono text-lg">{ticket_no}</div>
 
             <div className="mt-6 flex flex-wrap gap-3">
               <button
-                className="rounded-md bg-cyan-400 px-4 py-2 text-sm font-semibold text-zinc-950 hover:bg-cyan-300 disabled:opacity-60"
+                className="primary-btn px-4 py-2 text-sm disabled:opacity-60"
                 onClick={async () => {
                   await navigator.clipboard.writeText(`Ticket: ${ticket_no}`);
                 }}
@@ -153,13 +162,13 @@ export default function PublicSubmitPage() {
                 Copy
               </button>
               <a
-                className="rounded-md border border-zinc-700 px-4 py-2 text-sm font-semibold text-zinc-100 hover:bg-zinc-900"
+                className="secondary-btn px-4 py-2 text-sm font-semibold text-zinc-100"
                 href={`/public/track?ticket_no=${encodeURIComponent(ticket_no)}`}
               >
                 Track now
               </a>
               <a
-                className="rounded-md border border-zinc-700 px-4 py-2 text-sm font-semibold text-zinc-100 hover:bg-zinc-900"
+                className="secondary-btn px-4 py-2 text-sm font-semibold text-zinc-100"
                 href="/public/submit"
                 onClick={() => {
                   setSubmitState({ kind: "form" });
@@ -181,40 +190,64 @@ export default function PublicSubmitPage() {
               </a>
             </div>
           </div>
+          </div>
         </div>
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen bg-zinc-950 text-zinc-50">
+    <main className="min-h-screen text-zinc-50">
+      <header className="top-nav">
+        <div className="mx-auto flex max-w-3xl items-center justify-between px-6 py-4">
+          <BrandMark href="/public" label="InfraDesk Public" />
+          <Link href="/" className="secondary-btn px-3 py-1.5 text-xs font-semibold text-zinc-100">Home</Link>
+        </div>
+      </header>
       <div className="mx-auto max-w-3xl px-6 py-16">
-        <h1 className="text-2xl font-semibold">Submit Complaint</h1>
+        <div className="glass-card rounded-2xl p-8 sm:p-10">
+        <h1 className="text-3xl font-semibold tracking-tight">Submit Complaint</h1>
         <p className="mt-2 text-zinc-300">
           You will receive a ticket number. Use it with your email address to
           track the complaint.
         </p>
 
         <div className="mt-8 grid gap-4">
-          <div className="rounded-lg border border-zinc-800 bg-zinc-900/40 p-5">
+          <div className="glass-card rounded-xl p-5">
             <div className="grid gap-4 sm:grid-cols-2">
               <Field label="Full name *">
-                <input
-                  className="w-full rounded-md border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm"
-                  value={form.name}
-                  onChange={(e) =>
-                    setForm((f) => ({ ...f, name: e.target.value }))
-                  }
-                />
+                <div className="relative">
+                  <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M20 21a8 8 0 0 0-16 0" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+                      <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="1.8"/>
+                    </svg>
+                  </span>
+                  <input
+                    className="w-full rounded-md border border-zinc-800 bg-zinc-950 px-9 py-2 text-sm"
+                    value={form.name}
+                    onChange={(e) =>
+                      setForm((f) => ({ ...f, name: e.target.value }))
+                    }
+                  />
+                </div>
               </Field>
               <Field label="Email *">
-                <input
-                  className="w-full rounded-md border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm"
-                  value={form.email}
-                  onChange={(e) =>
-                    setForm((f) => ({ ...f, email: e.target.value }))
-                  }
-                />
+                <div className="relative">
+                  <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <rect x="3.5" y="5.5" width="17" height="13" rx="2.5" stroke="currentColor" strokeWidth="1.8"/>
+                      <path d="M5.5 8l6.5 5 6.5-5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </span>
+                  <input
+                    className="w-full rounded-md border border-zinc-800 bg-zinc-950 px-9 py-2 text-sm"
+                    value={form.email}
+                    onChange={(e) =>
+                      setForm((f) => ({ ...f, email: e.target.value }))
+                    }
+                  />
+                </div>
               </Field>
               <Field label="Phone">
                 <input
@@ -246,7 +279,7 @@ export default function PublicSubmitPage() {
             </div>
           </div>
 
-          <div className="rounded-lg border border-zinc-800 bg-zinc-900/40 p-5">
+          <div className="glass-card rounded-xl p-5">
             <div className="grid gap-4 sm:grid-cols-2">
               <Field label="Zone *">
                 <select
@@ -332,7 +365,7 @@ export default function PublicSubmitPage() {
 
             <div className="mt-5 flex items-center gap-3">
               <button
-                className="rounded-md bg-cyan-400 px-4 py-2 text-sm font-semibold text-zinc-950 hover:bg-cyan-300 disabled:opacity-60"
+                className="primary-btn px-4 py-2 text-sm disabled:opacity-60"
                 onClick={onSubmit}
                 disabled={submitting || loadingMeta}
               >
@@ -346,6 +379,7 @@ export default function PublicSubmitPage() {
               </a>
             </div>
           </div>
+        </div>
         </div>
       </div>
     </main>

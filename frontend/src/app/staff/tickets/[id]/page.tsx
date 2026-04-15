@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { ApiError, MeResponse, StaffDirectoryUser, Ticket, TicketUpdate } from "@/lib/api";
 import { apiFetchStaff, clearTokens, getMe } from "@/lib/staffAuth";
+import BrandMark from "@/components/BrandMark";
 
 type Paginated<T> = {
   count: number;
@@ -152,7 +153,29 @@ export default function StaffTicketDetailPage() {
   }
 
   return (
-    <main className="min-h-screen bg-zinc-950 text-zinc-50">
+    <main className="min-h-screen text-zinc-50">
+      <header className="top-nav">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+          <BrandMark href="/staff/tickets" label="InfraDesk Staff" />
+          <div className="flex items-center gap-2">
+            <button
+              className="secondary-btn px-3 py-1.5 text-xs font-semibold text-zinc-100"
+              onClick={() => router.push("/staff/profile")}
+            >
+              Profile
+            </button>
+            <button
+              className="secondary-btn px-3 py-1.5 text-xs font-semibold text-zinc-100"
+              onClick={() => {
+                clearTokens();
+                router.replace("/staff/login");
+              }}
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+      </header>
       <div className="mx-auto max-w-6xl px-6 py-10">
         <div className="flex flex-wrap items-start justify-between gap-6">
           <div>
@@ -201,8 +224,11 @@ export default function StaffTicketDetailPage() {
         ) : null}
 
         {loading ? (
-          <div className="mt-6 rounded-lg border border-zinc-800 bg-zinc-900/40 p-6 text-sm text-zinc-300">
-            Loading…
+          <div className="mt-6 rounded-lg border border-zinc-800 bg-zinc-900/40 p-6">
+            <div className="loading-line h-3 w-40" />
+            <div className="loading-line mt-3 h-3 w-full" />
+            <div className="loading-line mt-2 h-3 w-[88%]" />
+            <div className="loading-line mt-2 h-3 w-[64%]" />
           </div>
         ) : ticket ? (
           <div className="mt-6 grid gap-6 lg:grid-cols-3">
@@ -217,7 +243,7 @@ export default function StaffTicketDetailPage() {
                   </div>
                   <div className="text-right">
                     <div className="text-xs text-zinc-400">Current status</div>
-                    <div className="mt-1 inline-flex rounded-md border border-zinc-700 bg-zinc-950/60 px-2 py-1 text-xs">
+                    <div className={`mt-1 inline-flex status-badge ${statusBadgeClass(ticket.status)}`}>
                       {ticket.status}
                     </div>
                   </div>
@@ -244,7 +270,9 @@ export default function StaffTicketDetailPage() {
                 <div className="text-sm font-semibold">Updates</div>
                 <div className="mt-4 grid gap-3">
                   {updates.length === 0 ? (
-                    <div className="text-sm text-zinc-300">No updates yet.</div>
+                    <div className="rounded-md border border-zinc-800 bg-zinc-950/40 p-4 text-sm text-zinc-300">
+                      No timeline updates yet for this ticket.
+                    </div>
                   ) : (
                     updates.map((u) => (
                       <div
@@ -386,6 +414,15 @@ export default function StaffTicketDetailPage() {
       </div>
     </main>
   );
+}
+
+function statusBadgeClass(status: string) {
+  if (status === "OPEN") return "status-open";
+  if (status === "IN_PROGRESS") return "status-progress";
+  if (status === "RESOLVED") return "status-resolved";
+  if (status === "CLOSED") return "status-closed";
+  if (status === "REOPENED") return "status-reopened";
+  return "status-open";
 }
 
 function Info({ label, value }: { label: string; value: string }) {

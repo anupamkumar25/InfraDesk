@@ -22,13 +22,19 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const year = new Date().getFullYear();
   return (
     <html
       lang="en"
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+        <footer className="mt-auto border-t border-zinc-800/60 bg-zinc-950/40 px-6 py-4 text-center text-xs text-zinc-400">
+          © {year} InfraDesk. All rights reserved | Designed and developed by Anupam.
+        </footer>
+      </body>
     </html>
   );
 }
