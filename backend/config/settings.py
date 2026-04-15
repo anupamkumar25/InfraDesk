@@ -136,9 +136,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / "staticfiles"
 ON_VERCEL = os.getenv("VERCEL", "") == "1"
+
+# On Vercel serverless we don't reliably run collectstatic during build.
+# Let WhiteNoise serve static files directly from Django's static finders.
+if ON_VERCEL:
+    WHITENOISE_USE_FINDERS = True
 
 STORAGES = {
     "default": {
