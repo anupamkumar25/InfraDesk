@@ -5,6 +5,7 @@ Django settings for InfraDesk.
 from pathlib import Path
 from datetime import timedelta
 import os
+import dj_database_url
 
 from dotenv import load_dotenv
 
@@ -78,25 +79,28 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DB_ENGINE = os.getenv("DB_ENGINE", "postgres").lower()
-if DB_ENGINE == "sqlite":
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
-    }
-else:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": os.getenv("POSTGRES_DB", "infradesk"),
-            "USER": os.getenv("POSTGRES_USER", "infradesk"),
-            "PASSWORD": os.getenv("POSTGRES_PASSWORD", "infradesk"),
-            "HOST": os.getenv("POSTGRES_HOST", "localhost"),
-            "PORT": os.getenv("POSTGRES_PORT", "5432"),
-        }
-    }
+# if DB_ENGINE == "sqlite":
+#     DATABASES = {
+#         "default": {
+#             "ENGINE": "django.db.backends.sqlite3",
+#             "NAME": BASE_DIR / "db.sqlite3",
+#         }
+#     }
+# else:
+#     DATABASES = {
+#         "default": {
+#             "ENGINE": "django.db.backends.postgresql",
+#             "NAME": os.getenv("POSTGRES_DB", "infradesk"),
+#             "USER": os.getenv("POSTGRES_USER", "infradesk"),
+#             "PASSWORD": os.getenv("POSTGRES_PASSWORD", "infradesk"),
+#             "HOST": os.getenv("POSTGRES_HOST", "localhost"),
+#             "PORT": os.getenv("POSTGRES_PORT", "5432"),
+#         }
+#     }
 
+DATABASES = {
+    'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -134,17 +138,19 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / "staticfiles"
+ON_VERCEL = os.getenv("VERCEL", "") == "1"
 
 STORAGES = {
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
-        # In production we want hashed, compressed static files.
-        # In local dev (DEBUG=1), Manifest storage can 500 if collectstatic wasn't run.
+        # Manifest storage requires collected static manifest entries.
+        # On Vercel serverless deploys, that manifest is often unavailable at runtime.
+        # Use non-manifest storage there to prevent admin template 500 errors.
         "BACKEND": (
-            "django.contrib.staticfiles.storage.StaticFilesStorage"
-            if DEBUG
+            "whitenoise.storage.CompressedStaticFilesStorage"
+            if (DEBUG or ON_VERCEL)
             else "whitenoise.storage.CompressedManifestStaticFilesStorage"
         ),
     },
