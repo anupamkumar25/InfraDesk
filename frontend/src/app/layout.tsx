@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,6 +35,7 @@ export default function RootLayout({
         <footer className="mt-auto border-t border-zinc-800/60 bg-zinc-950/40 px-6 py-4 text-center text-xs text-zinc-400">
           © {year} InfraDesk. All rights reserved | Designed and developed by Anupam.
         </footer>
+        <Analytics />
       </body>
     </html>
   );
